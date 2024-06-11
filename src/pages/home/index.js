@@ -1,12 +1,15 @@
 import {useState} from 'react'
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet, Image, TouchableOpacity, Modal} from 'react-native'
 import Slider from '@react-native-community/slider'
+import {ModalPassword} from '../../../components/modal'
 
 let charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*-_"
 
-export default function App() {
+export function Home() {
 
   const [size, setSize] = useState(10)
+  const [passwordValue, setPasswordValue] = useState("")
+  const [modalVisible, setModalVisible] = useState(false)
 
   function generatePassword() {
     let passoword = "";
@@ -14,13 +17,14 @@ export default function App() {
     for(let i = 0;i < size; i++){
       passoword += charset.charAt(Math.floor(Math.random() * n))
     }
-    
+    setPasswordValue(passoword)
+    setModalVisible(true)
   }
 
   return(
     <View style={styles.container}>
       <Image
-        source={require("../../assets/images/logo.png")}
+        source={require("../../../assets/images/logo.png")}
         style={styles.logo}
       />
       <Text style={styles.title}>{size} caracteres</Text>
@@ -41,6 +45,10 @@ export default function App() {
       <TouchableOpacity style={styles.button} onPress={generatePassword}>
         <Text style={styles.buttonText}>Gerar senha</Text>
       </TouchableOpacity>
+
+      <Modal visible={modalVisible} animationType='fade' transparent={true}>
+        <ModalPassword  password={passwordValue}  handleClose={() => setModalVisible(false)}/>
+      </Modal>
 
     </View>
   )
